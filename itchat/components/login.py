@@ -26,7 +26,7 @@ def load_login(core):
     core.get_msg           = get_msg
     core.logout            = logout
 
-def login(self, enableCmdQR=False, picDir=None, qrCallback=None,
+def login(self, enableCmdQR=False, picDir=None, silence=False, qrCallback=None,
         loginCallback=None, exitCallback=None):
     if self.alive or self.isLogging:
         logger.warning('itchat has already logged in.')
@@ -42,7 +42,7 @@ def login(self, enableCmdQR=False, picDir=None, qrCallback=None,
                 time.sleep(1)
             logger.info('Downloading QR code.')
             qrStorage = self.get_QR(enableCmdQR=enableCmdQR,
-                picDir=picDir, qrCallback=qrCallback)
+                picDir=picDir, silence=silence, qrCallback=qrCallback)
             logger.info('Please scan the QR code to log in.')
         isLoggedIn = False
         while not isLoggedIn:
@@ -101,7 +101,7 @@ def get_QRuuid(self):
         self.uuid = data.group(2)
         return self.uuid
 
-def get_QR(self, uuid=None, enableCmdQR=False, picDir=None, qrCallback=None):
+def get_QR(self, uuid=None, enableCmdQR=False, picDir=None, silence=False, qrCallback=None):
     uuid = uuid or self.uuid
     picDir = picDir or config.DEFAULT_QR
     qrStorage = io.BytesIO()
@@ -115,7 +115,8 @@ def get_QR(self, uuid=None, enableCmdQR=False, picDir=None, qrCallback=None):
         else:
             with open(picDir, 'wb') as f:
                 f.write(qrStorage.getvalue())
-            utils.print_qr(picDir)
+            if not silence:
+                utils.print_qr(picDir)
     return qrStorage
 
 def check_login(self, uuid=None):

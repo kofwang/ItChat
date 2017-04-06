@@ -17,7 +17,7 @@ def load_register(core):
     core.run              = run
 
 def auto_login(self, hotReload=False, statusStorageDir='itchat.pkl',
-        enableCmdQR=False, picDir=None, qrCallback=None,
+        enableCmdQR=False, picDir=None, silence=False, qrCallback=None,
         loginCallback=None, exitCallback=None):
     if not test_connect():
         logger.info("You can't get access to internet or wechat domain, so exit.")
@@ -27,12 +27,12 @@ def auto_login(self, hotReload=False, statusStorageDir='itchat.pkl',
         if self.load_login_status(statusStorageDir,
                 loginCallback=loginCallback, exitCallback=exitCallback):
             return
-        self.login(enableCmdQR=enableCmdQR, picDir=picDir, qrCallback=qrCallback,
+        self.login(enableCmdQR=enableCmdQR, picDir=picDir, silence=silence, qrCallback=qrCallback,
             loginCallback=loginCallback, exitCallback=exitCallback)
         self.dump_login_status(statusStorageDir)
         self.hotReloadDir = statusStorageDir
     else:
-        self.login(enableCmdQR=enableCmdQR, picDir=picDir, qrCallback=qrCallback,
+        self.login(enableCmdQR=enableCmdQR, silence=silence, picDir=picDir, qrCallback=qrCallback,
             loginCallback=loginCallback, exitCallback=exitCallback)
 
 def configured_reply(self):
